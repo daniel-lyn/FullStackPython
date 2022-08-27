@@ -1,6 +1,7 @@
 import React from "react";
 import { Container, Row, Col, Button , Form} from "react-bootstrap";
 
+
 const Search = ({word, setWord, handleSubmit}) => {
   return (
     <Container className="mt-4">
@@ -17,7 +18,7 @@ const Search = ({word, setWord, handleSubmit}) => {
                 />
               </Col>
               <Col>
-                 <Button variant="primary" type="submit">Search</Button>
+                 <Button variant="primary" type="submit" onClick={() => setWord(() => "")}>Search</Button>
               </Col>
             </Form.Row>
           </Form>
