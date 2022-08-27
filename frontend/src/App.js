@@ -1,34 +1,53 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
-import Header from './components/Header';
-import Search from './components/Search';
-import { useState } from 'react';
-
+import "bootstrap/dist/css/bootstrap.min.css";
+import Header from "./components/Header";
+import Search from "./components/Search";
+import ImgCard from "./components/ImgCard";
+import { useState } from "react";
+import { Container, Row, Col } from "react-bootstrap";
 
 const UNSPLASH_KEY = process.env.REACT_APP_UNSPLASH_KEY;
 
-
 const App = () => {
-  const [word, setWord] = useState('');
+  const [word, setWord] = useState("");
+  const [img, setImg] = useState([]);
+
+  console.log(img);
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    console.log(word);
-    fetch(`https://api.unsplash.com/photos/random/?query=${word}&client_id=${UNSPLASH_KEY}`)
+
+    fetch(
+      `https://api.unsplash.com/photos/random/?query=${word}&client_id=${UNSPLASH_KEY}`
+    )
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        setImg([{ ...data, title: word }, ...img]);
       })
       .catch((err) => {
         console.log(err);
-      })
-  }
+      });
+    setWord("");
+  };
+
+  const handleDeleteImage = (id) => {
+    setImg(img.filter((image) => image.id !== id));
+  };
 
   return (
     <div>
-      <Header title="Images Gallery"/>
-      <Search word = {word} setWord = {setWord} handleSubmit={handleSearchSubmit}/>
+      <Header title="Images Gallery" />
+      <Search word={word} setWord={setWord} handleSubmit={handleSearchSubmit} />
+      <Container className="mt-4">
+        <Row xs={1} md={2} lg={3}>
+          {img.map((image, i) => (
+            <Col key={i} className="pb-3">
+              <ImgCard img={image} deleteImage={handleDeleteImage}/>
+            </Col>
+          ))}
+        </Row>
+      </Container>
     </div>
   );
-}
+};
 
 export default App;
