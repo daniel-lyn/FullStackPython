@@ -4,6 +4,7 @@ import Search from "./components/Search";
 import ImgCard from "./components/ImgCard";
 import { useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
+import Welcome from "./components/Welcome";
 
 const UNSPLASH_KEY = process.env.REACT_APP_UNSPLASH_KEY;
 
@@ -32,19 +33,23 @@ const App = () => {
   const handleDeleteImage = (id) => {
     setImg(img.filter((image) => image.id !== id));
   };
-
+  console.log(img.length);
   return (
     <div>
       <Header title="Images Gallery" />
       <Search word={word} setWord={setWord} handleSubmit={handleSearchSubmit} />
       <Container className="mt-4">
-        <Row xs={1} md={2} lg={3}>
-          {img.map((image, i) => (
-            <Col key={i} className="pb-3">
-              <ImgCard img={image} deleteImage={handleDeleteImage}/>
-            </Col>
-          ))}
-        </Row>
+        {img.length ? (
+          <Row xs={1} md={2} lg={3}>
+            {img.map((image,i) => (
+              <Col key={i} className="pb-3">
+                <ImgCard img={image} deleteImage = {handleDeleteImage} />
+              </Col>
+            ))}
+          </Row>
+        ) : (
+          <Welcome />
+        )}
       </Container>
     </div>
   );
